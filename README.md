@@ -54,7 +54,7 @@ bulkpay-ng/
 
 🚀 Quick Start
 1. Clone & Install
-Bashgit clone https://github.com/yourusername/bulkpay-ng.git
+Bashgit clone https://github.com/Agiz-code/bulkpay-ng.git
 cd bulkpay-ng
 pnpm install
 2. Environment Setup
@@ -98,7 +98,7 @@ Input validation with class-validator
 💳 Payment Integrations
 
 Flutterwave – Bulk transfers
-Mono – Bank account linking (ready)
+Mono – Bank account linking 
 
 
 📦 Build for Production
