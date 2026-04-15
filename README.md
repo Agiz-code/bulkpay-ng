@@ -1,50 +1,124 @@
-# Welcome to your Expo app 👋
+# bulkpay-ng
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Modern Payroll SaaS Platform** for Nigerian businesses.
 
-## Get started
+Built with **React Native (Expo)** + **NestJS** + **Prisma** + **Neon Postgres** + **Flutterwave** & **Mono**.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ✨ Features
 
-2. Start the app
+- Secure Authentication & Role-based Access
+- Employee Management (CRUD)
+- Bulk Payroll Disbursement via Flutterwave
+- CSV Upload with Smart Validation
+- Real-time Push Notifications
+- Wallet & Multi-currency Support
+- Transaction History & Analytics Dashboard
+- Premium Fintech UI/UX
+- Monorepo Architecture (Turborepo)
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🛠 Tech Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Frontend (Mobile)
+- **React Native** with Expo SDK 54
+- **Expo Router** (File-based routing)
+- **TypeScript**
+- **NativeWind** ready (Tailwind)
+- **TanStack Query**
+- **Expo Notifications**
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Backend
+- **NestJS**
+- **Prisma ORM**
+- **Neon Serverless Postgres**
+- **Flutterwave Node SDK**
+- **JWT Authentication**
+- **TypeScript**
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## 📁 Project Structure
 
 ```bash
-npm run reset-project
-```
+bulkpay-ng/
+├── apps/
+│   ├── backend/          # NestJS API
+│   └── mobile/           # React Native Expo App
+├── prisma/               # Shared Prisma schema
+├── .env.example
+├── turbo.json
+└── pnpm-workspace.yaml
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+🚀 Quick Start
+1. Clone & Install
+Bashgit clone https://github.com/yourusername/bulkpay-ng.git
+cd bulkpay-ng
+pnpm install
+2. Environment Setup
+Copy and configure environment files:
+Bashcp .env.example .env
+cp apps/backend/.env.example apps/backend/.env
+cp apps/mobile/.env.example apps/mobile/.env
+Update your laptop IP in apps/mobile/.env for development.
+3. Database (Neon)
+Bashcd apps/backend
+npx prisma generate
+npx prisma db push
+4. Run Development
+Bash# Terminal 1 - Backend
+pnpm dev:backend
 
-## Learn more
+# Terminal 2 - Mobile
+cd apps/mobile
+npx expo start --clear
 
-To learn more about developing your project with Expo, look at the following resources:
+📱 Key Screens
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Login / Register
+Dashboard (Balance Card + Quick Actions)
+Payroll (Bulk payout + CSV validation)
+Employees (Team management)
+Transactions (History)
+Reports (Analytics & Insights)
+Success (Payment confirmation with animation)
 
-## Join the community
 
-Join our community of developers creating universal apps.
+🔐 Security Features
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+JWT Authentication
+Password hashing with bcrypt
+Protected routes
+Webhook signature verification (Flutterwave)
+Input validation with class-validator
+
+
+💳 Payment Integrations
+
+Flutterwave – Bulk transfers
+Mono – Bank account linking (ready)
+
+
+📦 Build for Production
+Bashcd apps/mobile
+eas build --platform android   # or ios
+
+🤝 Contributing
+
+Fork the repository
+Create a feature branch
+Commit your changes
+Open a Pull Request
+
+
+📄 License
+MIT License © 2026 bulkpay-ng
+
+👨‍💼 Author
+Agiz Seth
+Mobile & Full-Stack Developer
+Lagos, Nigeria
+
+Made with ❤️ for Nigerian businesses
