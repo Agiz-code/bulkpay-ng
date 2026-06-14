@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  clerkId   String?    @unique
+  email     String     @unique
+  password  String
+  name      String     @default("")
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  companyId String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  role      UserRole
+  AuditLog  AuditLog[]
+  company   Company    @relation(fields: [companyId], references: [id])
+}
+
+model Company {
+  id             String         @id @default(uuid())
+  name           String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  bankAccounts   BankAccount[]
+  payrollBatches PayrollBatch[]
+  users          User[]
+  wallets        Wallet[]
+}
+
+model Wallet {
+  id           String        @id @default(uuid())
+  companyId    String        @unique
+  balance      BigInt        @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  company      Company       @relation(fields: [companyId], references: [id])
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  walletId    String
+  amount      BigInt
+  type        TransactionType
+  status      TransactionStatus
+  reference   String            @unique
+  description String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  wallet      Wallet            @relation(fields: [walletId], references: [id])
+}
+
+model BankAccount {
+  id            String   @id @default(uuid())
+  companyId     String
+  accountNumber String
+  bankCode      String
+  accountName   String?
+  recipientCode String   @unique
+  createdAt     DateTime @default(now())
+  company       Company  @relation(fields: [companyId], references: [id])
+}
+
+model PayrollBatch {
+  id        String        @id @default(uuid())
+  total     BigInt
+  companyId String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  status    PayrollStatus
+  company   Company       @relation(fields: [companyId], references: [id])
+  items     PayrollItem[]
+}
+
+model PayrollItem {
+  id        String        @id @default(uuid())
+  name      String
+  account   String
+  bank      String
+  amount    BigInt
+  batchId   String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  status    PayrollStatus
+  batch     PayrollBatch  @relation(fields: [batchId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  userId    String
+  metadata  Json
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum PayrollStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+}

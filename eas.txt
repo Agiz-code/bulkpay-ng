@@ -1,1 +1,222 @@
 eas init --id 5c46fd84-053d-4fe7-b9c2-365962274789
+
+
+You are a senior full-stack engineer.
+comfirm if this align with the project setup before implementing:
+We are building a system with:
+
+- Expo (React Native) frontend
+
+- Next.js backend (App Router / API routes)
+
+- Prisma ORM
+
+- PostgreSQL (Neon)
+
+- Clerk authentication
+
+Clerk
+
+Neon
+
+---
+
+# 🎯 Goal
+
+Implement **Clerk Webhooks in Next.js backend** to sync users into Prisma database.
+
+Webhook must handle:
+
+- `user.created`
+
+- `user.updated`
+
+- `user.deleted`
+
+---
+
+# 📦 Prisma Model
+
+```
+```
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+```
+
+---
+
+# 🔐 Security Requirement
+
+Use **Svix webhook verification**:
+
+```
+```
+npm install svix
+```
+```
+
+Environment variable:
+
+```
+```
+CLERK_WEBHOOK_SECRET=whsec_xxx
+```
+```
+
+DO NOT process unverified requests.
+
+---
+
+# 🌐 API Route Requirement (Next.js)
+
+Create:
+
+### App Router:
+
+```
+```
+app/api/webhooks/clerk/route.ts
+```
+```
+
+OR Pages Router:
+
+```
+```
+pages/api/webhooks/clerk.ts
+```
+```
+
+---
+
+# ⚙️ Requirements
+
+## 1. Raw body handling
+
+Webhook must use RAW request body (not JSON parsed).
+
+---
+
+## 2. Verify webhook
+
+Use Svix:
+
+- headers:
+
+svix-id
+
+- svix-timestamp
+
+- svix-signature
+
+Verify before parsing payload.
+
+---
+
+## 3. Handle events
+
+### user.created / user.updated
+
+Extract:
+
+- id
+
+- email_addresses[0].email_address
+
+- first_name
+
+- last_name
+
+- image_url
+
+Then:
+
+```
+```
+await prisma.user.upsert(...)
+```
+```
+
+---
+
+### user.deleted
+
+```
+```
+await prisma.user.delete({
+  where: { clerkId: user.id }
+});
+```
+```
+
+---
+
+# 🧠 Prisma Client
+
+Assume:
+
+```
+```
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+```
+```
+
+---
+
+# ⚠️ IMPORTANT RULES
+
+- Must use `svix` verification
+
+- Must not trust request body without verification
+
+- Must handle missing email safely
+
+- Must be TypeScript clean
+
+- Must avoid `any` where possible
+
+---
+
+# 🧱 Architecture Flow
+
+```
+```
+Clerk
+  ↓
+Webhook event
+  ↓
+Next.js API route (/api/webhooks/clerk)
+  ↓
+Verify Svix signature
+  ↓
+Prisma upsert/delete
+  ↓
+Neon database
+```
+```
+
+---
+
+# 🧾 Output required
+
+Return:
+
+1. Full Next.js webhook route code
+
+2. Prisma user service/helper (if needed)
+
+3. .env variables
+
+4. Explanation of flow
+
+5. Common pitfalls
